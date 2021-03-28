@@ -50,6 +50,22 @@ app.get('/courses', (req, res) => {
     });
 });
 
+app.get('/instructorscourses', (req, res) => {
+    const sql = "SELECT i.ID, i.First_Name, c.Course_Title  FROM  course_assign AS ca INNER JOIN instructor_table AS i ON i.ID = ca.instructor_id INNER JOIN course_table AS c ON c.ID = ca.course_id"
+    conn.query(sql, (err, results) => {
+        if(err) throw err;
+        res.status(200).json(results);
+    });
+});
+
+app.get('/courseinstructors/:ID', (req, res) => {
+    const sql = "SELECT c.Course_Title, c.ID, i.First_Name FROM  course_assign AS ca INNER JOIN instructor_table AS i ON i.ID = ca.instructor_id INNER JOIN course_table AS c ON c.ID = ca.course_id WHERE c.ID ="+req.params.ID
+    conn.query(sql, (err, results) => {
+        if(err) throw err;
+        res.status(200).json(results);
+    });
+});
+
 //Server Listening
 app.listen(3001,() => {
     console.log('Server Started at port 3001');
